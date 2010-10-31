@@ -3229,6 +3229,12 @@ SyntheticFunction::synt_function method_info::synt_method()
 					constant = llvm::ConstantInt::get(int_type, 1);
 					value=Builder.CreateSub(v1.first,constant);
 				}
+				else if(v1.second==STACK_NUMBER)
+				{
+					constant = llvm::ConstantInt::get(int_type, 1);
+					v1.first=Builder.CreateFPToSI(v1.first,int_type);
+					value=Builder.CreateSub(v1.first,constant);
+				}
 				else
 				{
 					abstract_value(ex,Builder,v1);
@@ -3412,6 +3418,11 @@ SyntheticFunction::synt_function method_info::synt_method()
 				{
 					value=Builder.CreateMul(v1.first, v2.first);
 					static_stack_push(static_stack,stack_entry(value,STACK_INT));
+				}
+				else if(v1.second==STACK_NUMBER && v2.second==STACK_NUMBER)
+				{
+					value=Builder.CreateFMul(v1.first, v2.first);
+					static_stack_push(static_stack,stack_entry(value,STACK_NUMBER));
 				}
 				else if(v1.second==STACK_NUMBER && v2.second==STACK_INT)
 				{
